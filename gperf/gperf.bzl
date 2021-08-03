@@ -1,7 +1,7 @@
 def _gperf_impl(ctx):
     outputs = []
     for f in ctx.files.srcs:
-        outp = "{}.out".format(f.basename)
+        outp = "{}.{}".format(f.basename, ctx.attr.suffix)
         out = ctx.actions.declare_file(outp)
         ctx.actions.run_shell(
             command = "gperf --output-file={} {}".format(out.path, f.path),
@@ -20,5 +20,6 @@ gperf = rule(
     output_to_genfiles = True,
     attrs = {
         "srcs": attr.label_list(allow_files = [".gperf"]),
+        "suffix": attr.string(default = "out"),
     },
 )
